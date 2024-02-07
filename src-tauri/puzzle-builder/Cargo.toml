@@ -13,6 +13,7 @@ image = "0.24.8"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.5.4" }
 thiserror = "1"
+rand = "0"
 
 [dev-dependencies]
 anyhow = "1"

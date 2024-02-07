@@ -2151,6 +2151,7 @@ dependencies = [
  "anyhow",
  "image",
  "nalgebra",
+ "rand 0.7.3",
  "serde",
  "tauri",
  "thiserror",

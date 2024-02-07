@@ -1,15 +1,16 @@
 use std::ops::{Deref, DerefMut};
 
 use nalgebra::DMatrix;
-use serde::{Deserialize, Serialize};
 
-use super::save::GameSave;
+use crate::utils::rand_matrix;
+
+use super::{frame::GameFrame, save::GameSave};
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd)]
 pub struct GameParty{
     game_save: GameSave,
     current: DMatrix<String>,
-    moves: u32
+    moves: usize
 }
 
 impl Deref for GameParty {
@@ -19,8 +20,31 @@ impl Deref for GameParty {
     }
 }
 
+impl DerefMut for GameParty {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.game_save
+    }
+}
+
 impl GameParty {
     pub fn new(game_save: GameSave) -> GameParty {
-        todo!()
+        GameParty {
+            current: rand_matrix(&game_save),
+            game_save,
+            moves: 0
+        }
+    }
+    pub fn get_current(&self) -> &DMatrix<String> {
+        &self.current
+    }
+    pub fn get_moves_cound(&self) -> usize {
+        self.moves
+    }
+    pub fn swap(&mut self, frame: GameFrame, target: GameFrame){
+        self.current.swap((frame.y, frame.x), (target.y, target.x));
+        self.moves += 1;
+    }
+    pub fn have_won(&self) -> bool {
+        self.images == self.current
     }
 }
