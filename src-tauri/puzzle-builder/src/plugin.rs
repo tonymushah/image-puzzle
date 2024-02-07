@@ -7,7 +7,12 @@ use commands::{
     get_moves::{__cmd__get_moves, get_moves},
     have_won::{__cmd__have_won, have_won},
     init::{__cmd__init, init},
-    swap::{__cmd__swap, swap},
+    swap::{
+        __cmd__swap,
+        columns::{__cmd__swap_columns, swap_columns},
+        rows::{__cmd__swap_rows, swap_rows},
+        swap,
+    },
 };
 use tauri::{
     generate_handler,
@@ -25,7 +30,9 @@ pub fn get_plugin<R: Runtime>() -> TauriPlugin<R> {
             swap,
             have_won,
             get_image,
-            get_moves
+            get_moves,
+            swap_rows,
+            swap_columns
         ])
         .setup(|app| {
             app.manage(GameStates::default());

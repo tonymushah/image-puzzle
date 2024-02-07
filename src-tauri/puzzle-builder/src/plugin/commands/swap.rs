@@ -1,3 +1,6 @@
+pub mod columns;
+pub mod rows;
+
 use serde::Deserialize;
 use tauri::{Runtime, Window};
 
@@ -12,6 +15,12 @@ use crate::{
 pub struct SwapArgs {
     frame: GameFrame,
     target: GameFrame,
+}
+
+#[derive(Debug, Clone, Copy, Deserialize)]
+pub struct SwapColArgArgs {
+    pub(crate) current: usize,
+    pub(crate) target: usize,
 }
 
 impl SwapArgs {
