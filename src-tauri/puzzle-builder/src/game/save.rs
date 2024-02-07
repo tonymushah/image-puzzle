@@ -60,7 +60,7 @@ impl GameSave {
         let image = open(&image_path)?;
         let images = split_image(image, size)?;
         let images_path =
-            images.map_with_location(|_, _, _| format!("{}.{}", Uuid::new_v4(), extension));
+            images.map_with_location(|y, x, _| format!("{x}-{y}-{}.{}", Uuid::new_v4(), extension));
         for (y, row) in images.row_iter().enumerate() {
             for (x, colums) in row.column_iter().enumerate() {
                 println!("{x}-{y}");
