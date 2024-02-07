@@ -1,5 +1,8 @@
 use std::{
-    fs::{create_dir_all, File}, io::{BufReader, BufWriter, Read, Write}, ops::{Deref, DerefMut}, path::{Path, PathBuf}
+    fs::{create_dir_all, File},
+    io::{BufReader, BufWriter, Read, Write},
+    ops::{Deref, DerefMut},
+    path::{Path, PathBuf},
 };
 
 use image::open;
@@ -56,11 +59,17 @@ impl GameSave {
         create_dir_all(&game_path)?;
         let image = open(&image_path)?;
         let images = split_image(image, size)?;
-        let images_path = images.map_with_location(|_, _, _| format!("{}.{}", Uuid::new_v4(), extension));
+        let images_path =
+            images.map_with_location(|_, _, _| format!("{}.{}", Uuid::new_v4(), extension));
         for (y, row) in images.row_iter().enumerate() {
             for (x, colums) in row.column_iter().enumerate() {
                 println!("{x}-{y}");
-                colums[(0, 0)].save(game_path.as_ref().to_path_buf().join(images_path[(y, x)].as_str()))?;
+                colums[(0, 0)].save(
+                    game_path
+                        .as_ref()
+                        .to_path_buf()
+                        .join(images_path[(y, x)].as_str()),
+                )?;
             }
         }
         let save = Self {
@@ -78,5 +87,12 @@ impl GameSave {
         let mut save: Self = toml::from_str(&buf)?;
         save.game_path = game_path.as_ref().to_path_buf();
         Ok(save)
+    }
+    pub fn get_image_buf(&self, image: &String) -> Result<Vec<u8>> {
+        let file = File::open(self.game_path.join(image))?;
+        let mut buf_reader = BufReader::new(file);
+        let mut buf = Vec::<u8>::new();
+        buf_reader.read_to_end(&mut buf)?;
+        Ok(buf)
     }
 }
