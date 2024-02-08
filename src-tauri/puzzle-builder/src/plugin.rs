@@ -7,6 +7,8 @@ use commands::{
     get_moves::{__cmd__get_moves, get_moves},
     have_won::{__cmd__have_won, have_won},
     init::{__cmd__init, init},
+    load::{__cmd__load, load},
+    reset::{__cmd__reset, reset},
     swap::{
         __cmd__swap,
         columns::{__cmd__swap_columns, swap_columns},
@@ -33,7 +35,9 @@ pub fn get_plugin<R: Runtime>() -> TauriPlugin<R> {
             get_image_by_path,
             get_moves,
             swap_rows,
-            swap_columns
+            swap_columns,
+            load,
+            reset
         ])
         .setup(|app| {
             app.manage(GameStates::default());

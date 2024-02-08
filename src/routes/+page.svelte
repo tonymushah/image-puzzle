@@ -3,6 +3,7 @@
 	import type { GameDimension } from '$lib/plugin';
 	import get_current from '$lib/plugin/commands/get_current';
 	import init from '$lib/plugin/commands/init';
+	import load from '$lib/plugin/commands/load';
 	import { dialog } from '@tauri-apps/api';
 	import { re } from 'mathjs';
 	import { onMount } from 'svelte';
@@ -26,19 +27,19 @@
 		if (image_path != undefined && game_path != undefined && size != undefined) {
 			try {
 				if (typeof size == 'number') {
-                    const _size = String(size)
+					const _size = String(size);
 					await init({
 						image_path,
 						game_path,
 						size
 					});
-				}else {
-                    await init({
+				} else {
+					await init({
 						image_path,
 						game_path,
 						size
 					});
-                }
+				}
 
 				goto('/game');
 			} catch (error_) {
@@ -54,6 +55,18 @@
 			}
 		} else {
 			error = new Error('SomeData is missing');
+		}
+	};
+	const load_game = async function () {
+		const res = await dialog.open({
+			title: 'Load a game',
+			multiple: false,
+			directory: true,
+			recursive: false
+		});
+		if (typeof res == 'string') {
+			await load(res);
+			goto('/game');
 		}
 	};
 	$: {
@@ -78,6 +91,14 @@
 
 <h1>Image Puzzle</h1>
 
+<p>
+	Want to <button
+		on:click={async () => {
+			await load_game();
+		}}>load a game save</button
+	>
+</p>
+
 {#if error != undefined}
 	<div class="error">
 		<p>{error.name} : {error.message}</p>
@@ -95,7 +116,7 @@
 	<button
 		on:click={async () => {
 			const res = await dialog.open({
-				title: 'Choose an image',
+				title: 'Choose a directory',
 				multiple: false,
 				directory: false
 			});
