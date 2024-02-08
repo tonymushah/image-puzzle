@@ -48,12 +48,14 @@ impl GameParty {
         self.images == self.current
     }
     pub fn get_image_buf_by_frame(&self, frame: GameFrame) -> Result<Vec<u8>> {
-        self.get_image_buf(&self.images[(frame.y, frame.x)])
+        self.get_image_buf(&self.current[(frame.y, frame.x)])
     }
     pub fn swap_rows(&mut self, current: usize, target: usize) {
         self.current.swap_rows(current, target);
+        self.moves += 1;
     }
     pub fn swap_columns(&mut self, current: usize, target: usize) {
         self.current.swap_columns(current, target);
+        self.moves += 1;
     }
 }

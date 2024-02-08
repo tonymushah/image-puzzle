@@ -3,7 +3,7 @@ pub mod state;
 
 use commands::{
     get_current::{__cmd__get_current, get_current},
-    get_image::{__cmd__get_image, get_image},
+    get_image::{__cmd__get_image, __cmd__get_image_by_path, get_image, get_image_by_path},
     get_moves::{__cmd__get_moves, get_moves},
     have_won::{__cmd__have_won, have_won},
     init::{__cmd__init, init},
@@ -30,6 +30,7 @@ pub fn get_plugin<R: Runtime>() -> TauriPlugin<R> {
             swap,
             have_won,
             get_image,
+            get_image_by_path,
             get_moves,
             swap_rows,
             swap_columns

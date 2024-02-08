@@ -1,12 +1,11 @@
 use nalgebra::{DMatrix, Scalar};
 use serde::{Deserialize, Serialize};
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(untagged)]
 pub enum GameDimension {
     Square(usize),
-    Rectangle{
-        lines: usize,
-        columns: usize
-    }
+    Rectangle { lines: usize, columns: usize },
 }
 
 impl GameDimension {

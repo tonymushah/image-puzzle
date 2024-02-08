@@ -12,3 +12,14 @@ pub async fn get_image<R: Runtime>(
     let party = state_read.get(window.label()).ok_or(Error::GameNotLoaded)?;
     party.get_image_buf_by_frame(frame)
 }
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn get_image_by_path<R: Runtime>(
+    window: Window<R>,
+    state: tauri::State<'_, GameStates>,
+    path: String,
+) -> Result<Vec<u8>> {
+    let state_read = state.read().await;
+    let party = state_read.get(window.label()).ok_or(Error::GameNotLoaded)?;
+    party.get_image_buf(&path)
+}

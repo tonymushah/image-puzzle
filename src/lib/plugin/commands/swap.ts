@@ -4,7 +4,7 @@ import invoke from "../invoke";
 export default async function swap(current: GameFrame, target: GameFrame) {
     await invoke<void>("swap", {
         args: {
-            current,
+            frame: current,
             target
         }
     });
