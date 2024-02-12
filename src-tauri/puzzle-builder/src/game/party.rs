@@ -2,7 +2,7 @@ use std::ops::{Deref, DerefMut};
 
 use nalgebra::DMatrix;
 
-use crate::{utils::rand_matrix, Result};
+use crate::{error::Error, utils::rand_matrix, Result};
 
 use super::{frame::GameFrame, save::GameSave};
 
@@ -56,6 +56,29 @@ impl GameParty {
     }
     pub fn swap_columns(&mut self, current: usize, target: usize) {
         self.current.swap_columns(current, target);
+        self.moves += 1;
+    }
+    pub fn transpose(&mut self) -> Result<()> {
+        if self.current.nrows() != self.current.ncols() {
+            Err(Error::NotSquareMatrix)
+        } else {
+            self.current.transpose_mut();
+            self.moves += 1;
+            Ok(())
+        }
+    }
+    pub fn invert_rows(&mut self) {
+        let nrows = self.current.nrows();
+        for row in 0..(nrows / 2) {
+            self.current.swap_rows(row, nrows - row);
+        }
+        self.moves += 1;
+    }
+    pub fn invert_columns(&mut self) {
+        let ncols = self.current.ncols();
+        for col in 0..(ncols / 2) {
+            self.current.swap_columns(col, ncols - col);
+        }
         self.moves += 1;
     }
 }

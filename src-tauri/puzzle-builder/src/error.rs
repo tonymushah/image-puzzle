@@ -22,6 +22,8 @@ pub enum Error {
     GameAlreadyLoaded,
     #[error("Any game is not loaded for this window")]
     GameNotLoaded,
+    #[error("The given matrix is not square")]
+    NotSquareMatrix,
 }
 
 impl Serialize for Error {

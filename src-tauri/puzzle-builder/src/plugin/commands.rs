@@ -6,3 +6,4 @@ pub mod init;
 pub mod load;
 pub mod reset;
 pub mod swap;
+pub mod transpose;

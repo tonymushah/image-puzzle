@@ -15,6 +15,7 @@ use commands::{
         rows::{__cmd__swap_rows, swap_rows},
         swap,
     },
+    transpose::{__cmd__transpose, transpose},
 };
 use tauri::{
     generate_handler,
@@ -37,7 +38,8 @@ pub fn get_plugin<R: Runtime>() -> TauriPlugin<R> {
             swap_rows,
             swap_columns,
             load,
-            reset
+            reset,
+            transpose
         ])
         .setup(|app| {
             app.manage(GameStates::default());
