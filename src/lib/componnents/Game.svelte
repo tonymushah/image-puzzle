@@ -14,6 +14,11 @@
 	import { matrix } from 'mathjs';
 	import { onDestroy, onMount } from 'svelte';
 	import _reset from '$lib/plugin/commands/reset';
+	import _transpose from '$lib/plugin/commands/transpose';
+	import {
+		invert_rows as _invert_rows,
+		invoke_cols as _invert_cols
+	} from '$lib/plugin/commands/invert';
 
 	let columns: number;
 	let have_won = false;
@@ -85,6 +90,25 @@
 			await refresh();
 		}
 	}
+	async function transpose() {
+		if (!have_won) {
+			await _transpose();
+			await refresh();
+		}
+	}
+	async function invert_rows() {
+		if (!have_won) {
+			await _invert_rows();
+			await refresh();
+		}
+	}
+	async function invert_cols() {
+		if (!have_won) {
+			await _invert_cols();
+			await refresh();
+		}
+	}
+	$: isSquare = columns == rows;
 	$: moves_ = moves <= 1 ? 'move' : 'moves';
 </script>
 
@@ -96,6 +120,15 @@
 		}}>A new one</button
 	>
 {/if}
+
+<div class="controls">
+	{#if isSquare}
+		<button type="button" on:click={transpose}>Transpose</button>
+	{/if}
+	<button type="button" on:click={invert_cols}>Invert Columns</button>
+	<button type="button" on:click={invert_rows}>Invert Rows</button>
+</div>
+
 <table>
 	<tr>
 		<td class:have_won>
@@ -169,5 +202,13 @@
 <style>
 	.have_won {
 		color: red;
+	}
+	.controls {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+	}
+	.controls > button{
+		padding: 10px;
 	}
 </style>
