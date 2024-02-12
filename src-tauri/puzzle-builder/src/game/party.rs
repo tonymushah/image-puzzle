@@ -70,14 +70,14 @@ impl GameParty {
     pub fn invert_rows(&mut self) {
         let nrows = self.current.nrows();
         for row in 0..(nrows / 2) {
-            self.current.swap_rows(row, nrows - row);
+            self.current.swap_rows(row, nrows - row - 1);
         }
         self.moves += 1;
     }
     pub fn invert_columns(&mut self) {
         let ncols = self.current.ncols();
         for col in 0..(ncols / 2) {
-            self.current.swap_columns(col, ncols - col);
+            self.current.swap_columns(col, ncols - col - 1);
         }
         self.moves += 1;
     }
