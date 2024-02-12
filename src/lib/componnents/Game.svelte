@@ -137,6 +137,7 @@
 		{#each Array(columns).keys() as c}
 			<td>
 				<button
+					class:selected={current_column == c || target_column == c}
 					on:click={async () => {
 						if (!have_won) {
 							if (current_column == undefined) {
@@ -157,6 +158,7 @@
 		<tr>
 			<td>
 				<button
+					class:selected={target_row == x || current_row == x}
 					on:click={async () => {
 						if (!have_won) {
 							if (current_row == undefined) {
@@ -174,6 +176,7 @@
 			{#each Array(columns).keys() as y}
 				<td>
 					<button
+						class:selected={(current?.x == x && current.y == y) || (target?.x == x && target.y == y)}
 						on:click={async () => {
 							if (!have_won) {
 								if (current == undefined) {
@@ -210,5 +213,8 @@
 	}
 	.controls > button{
 		padding: 10px;
+	}
+	.selected {
+		background-color: antiquewhite;
 	}
 </style>
