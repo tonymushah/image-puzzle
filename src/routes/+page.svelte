@@ -3,7 +3,7 @@
 	import type { GameDimension } from '$lib/plugin';
 	import get_current from '$lib/plugin/commands/get_current';
 	import init from '$lib/plugin/commands/init';
-	import load from '$lib/plugin/commands/load';
+	import load, { load_party } from '$lib/plugin/commands/load';
 	import { dialog } from '@tauri-apps/api';
 	import { re } from 'mathjs';
 	import { onMount } from 'svelte';
@@ -69,6 +69,18 @@
 			goto('/game');
 		}
 	};
+	const load_party_ = async function () {
+		const res = await dialog.open({
+			title: 'Load a game',
+			multiple: false,
+			directory: true,
+			recursive: false
+		});
+		if (typeof res == 'string') {
+			await load_party(res);
+			goto('/game');
+		}
+	}
 	$: {
 		switch (size_mode) {
 			case SizeMode.Rect:
@@ -96,6 +108,10 @@
 		on:click={async () => {
 			await load_game();
 		}}>load a game save</button
+	> or <button
+		on:click={async () => {
+			await load_party_();
+		}}>load a party save</button
 	>
 </p>
 

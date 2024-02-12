@@ -19,6 +19,7 @@
 		invert_rows as _invert_rows,
 		invoke_cols as _invert_cols
 	} from '$lib/plugin/commands/invert';
+	import save_party from '$lib/plugin/commands/save_party';
 
 	let columns: number;
 	let have_won = false;
@@ -119,9 +120,16 @@
 			await reset();
 		}}>A new one</button
 	>
+{:else}
+	<button
+		on:click={async () => {
+			await reset();
+		}}>A new one</button
+	>
 {/if}
 
 <div class="controls">
+	<button type="button" on:click={save_party}>Save Party</button>
 	{#if isSquare}
 		<button type="button" on:click={transpose}>Transpose</button>
 	{/if}
