@@ -35,3 +35,31 @@ pub async fn load<R: Runtime>(
         Ok(())
     }
 }
+
+#[command(rename_all = "snake_case")]
+pub async fn load_party<R: Runtime>(
+    window: Window<R>,
+    state: State<'_, GameStates>,
+    path: PathBuf,
+) -> Result<()> {
+    let mut state_write = state.write().await;
+    if state_write.get(window.label()).is_some() {
+        Err(Error::GameAlreadyLoaded)
+    } else {
+        let game = GameParty::load_party(GameSave::load(path)?)?;
+        state_write.insert(window.label().into(), game);
+        let re_state = state.deref().clone();
+        let window_label = String::from(window.label());
+        window.on_window_event(move |e| {
+            let re_state = re_state.clone();
+            let window_label = window_label.clone();
+            if let WindowEvent::Destroyed = e {
+                block_on(async move {
+                    let mut re_state_write = re_state.write().await;
+                    let _ = re_state_write.remove(&window_label);
+                })
+            }
+        });
+        Ok(())
+    }
+}

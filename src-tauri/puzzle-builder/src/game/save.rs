@@ -21,6 +21,15 @@ pub struct GameSave {
     pub game_path: PathBuf,
 }
 
+impl Default for GameSave {
+    fn default() -> Self {
+        Self {
+            game_path: Default::default(),
+            images: DMatrix::from_element(1, 1, String::new()),
+        }
+    }
+}
+
 impl Deref for GameSave {
     type Target = DMatrix<String>;
     fn deref(&self) -> &Self::Target {

@@ -11,8 +11,9 @@ use commands::{
         cols::{__cmd__invert_cols, invert_cols},
         rows::{__cmd__invert_rows, invert_rows},
     },
-    load::{__cmd__load, load},
+    load::{__cmd__load, __cmd__load_party, load, load_party},
     reset::{__cmd__reset, reset},
+    save_party::{__cmd__save_party, save_party},
     swap::{
         __cmd__swap,
         columns::{__cmd__swap_columns, swap_columns},
@@ -45,7 +46,9 @@ pub fn get_plugin<R: Runtime>() -> TauriPlugin<R> {
             reset,
             transpose,
             invert_cols,
-            invert_rows
+            invert_rows,
+            load_party,
+            save_party
         ])
         .setup(|app| {
             app.manage(GameStates::default());

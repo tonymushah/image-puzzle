@@ -1,13 +1,20 @@
-use std::ops::{Deref, DerefMut};
+use std::{
+    fs::File,
+    io::{BufReader, BufWriter, Read, Write},
+    ops::{Deref, DerefMut},
+    path::Path,
+};
 
 use nalgebra::DMatrix;
+use serde::{Deserialize, Serialize};
 
 use crate::{error::Error, utils::rand_matrix, Result};
 
 use super::{frame::GameFrame, save::GameSave};
 
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Deserialize, Serialize)]
 pub struct GameParty {
+    #[serde(skip)]
     game_save: GameSave,
     current: DMatrix<String>,
     moves: usize,
@@ -80,5 +87,25 @@ impl GameParty {
             self.current.swap_columns(col, ncols - col - 1);
         }
         self.moves += 1;
+    }
+    pub fn party_file() -> &'static Path {
+        Path::new("party.toml")
+    }
+    pub fn save_party(&self) -> Result<()> {
+        let file = File::create(self.game_path.join(Self::party_file()))?;
+        let buf = toml::to_string(self)?;
+        let mut buf_writer = BufWriter::new(file);
+        buf_writer.write_all(buf.as_bytes())?;
+        buf_writer.flush()?;
+        Ok(())
+    }
+    pub fn load_party(save: GameSave) -> Result<Self> {
+        let file = File::open(save.game_path.join(Self::party_file()))?;
+        let mut buf = String::new();
+        let mut buf_reader = BufReader::new(file);
+        buf_reader.read_to_string(&mut buf)?;
+        let mut party: Self = toml::from_str(&buf)?;
+        party.game_save = save;
+        Ok(party)
     }
 }
